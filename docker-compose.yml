@@ -10,7 +10,8 @@ influxdb:
   volumes:
     # Data persistency
     # sudo mkdir -p /srv/docker/influxdb/data
-    - /srv/docker/influxdb/data:/var/lib/influxdb
+    - ${PROJECT_ROOT}/data/influxdb:/var/lib/influxdb
+    - ${PROJECT_ROOT}/etc/influxdb.conf:/etc/influxdb/influxdb.conf:ro
 
 telegraf:
   image: telegraf:latest
@@ -18,7 +19,7 @@ telegraf:
   links:
     - influxdb
   volumes:
-    - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    - ${PROJECT_ROOT}/etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
 
 grafana:
   image: grafana/grafana:latest
@@ -33,4 +34,19 @@ grafana:
   volumes:
     # Data persistency
     # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
-    - /srv/docker/grafana/data:/var/lib/grafana
+    - ${PROJECT_ROOT}/data/grafana:/var/lib/grafana
+    - ${PROJECT_ROOT}/etc/grafana.ini:/etc/grafana/grafana.ini:ro
+
+mosquitto:
+  image: eclipse-mosquitto:latest
+  container_name: mosquitto
+  ports:
+    - "1883:1883"
+    - "9001:9001"
+  links:
+    - influxdb
+  volumes:
+    - ${PROJECT_ROOT}/etc/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    - ${PROJECT_ROOT}/data/mosquitto:/mosquitto/data
+    - ${PROJECT_ROOT}/log/mosquitto:/mosquitto/log
+
