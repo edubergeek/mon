@@ -1,8 +1,6 @@
-# Docker-compose files for a simple uptodate
-# InfluxDB
-# + Grafana stack
-# + Telegraf
-# https://github.com/nicolargo/docker-influxdb-grafana.git
+## 
+
+Based on [this git repo](https://github.com/nicolargo/docker-influxdb-grafana.git)
 
 Get the stack (only once):
 
@@ -53,3 +51,15 @@ docker exec telegraf telegraf
 
 #Open your browser to http://localhost:3000
 #default login is admin:admin
+
+## Configuration
+### Grafana
+Edit the file ./etc/grafana.ini
+
+Set [server] root_url = http://#.#.#.#:3000
+
+To use grafana alerting:
+configure [smtp]
+enabled = true
+host = #.#.#.#:25
+
